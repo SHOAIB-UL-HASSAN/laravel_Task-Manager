@@ -1,100 +1,45 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Models\Task;
 use Illuminate\Http\Request;
-use App\MOdels\Task;
-use Illuminate\Support\Facades\DB;
-class TaskController extends Controller
+
+class TaskController extends Controller{
+public function index()
 {
-    public function index()
-    {
-        $todos = DB::table('tasks')->get();
-         return view('Tasks', ['tasks' => $todos]);
-    }
-
-    
-    public function store(Request $request)
-    {
-        // store the data
-        DB::table('todos')->insert([
-            'task' => $request->task
-        ]);
-    
-        // redirect
-        return redirect('/')->with('status', 'Task added!');
-    }
-    }
-
-    public function show($id)
-    {
-        
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        DB::table('tasks')->where('id', $id)->update([
-            'tasks' => $request->task
-        ]);
-    
-        // redirect
-        return redirect('/Task')->with('status', 'Task updated!');
-    }
-
-    public function destroy($id)
-    {
-        DB::table('todos')->where('id', $id)->delete();
-
-    // redirect
-    return redirect('/')->with('status', 'Task removed!');
-}
-    }
-}
-/*public function showTasks(){
-    $tasks = DB::table('tasks')->get();
-    return $tasks;
-}
-/*public function SingleUser(){
-    $tasks=DB::table('tasks')->where('Title')->get();
-    return $tasks;
+    $tasks = Task::all();
+    return view('index', compact('tasks'));
 }
 
-/*public function store(Request $request)
+public function create()
 {
-    $task = new Task();
-    $task->Title = $request->input('Title');
-    $task->save();
-    return redirect('/tasks');
+    return view('tasks.create');
 }
+
+public function store(Request $request)
+{
+    Task::create($request->all());
+    return redirect()->route('tasks.index');
+}
+
 public function show(Task $task)
 {
-    return view('tasks', compact('tasks'));
+    return view('tasks.show', compact('task'));
 }
+
+public function edit(Task $task)
+{
+    return view('tasks.edit', compact('task'));
+}
+
 public function update(Request $request, Task $task)
 {
-    $task->title = $request->input('Title');
-    // other fields
-    $task->save();
+    $task->update($request->all());
+    return redirect()->route('tasks.index');
+}
 
-    return redirect('/tasks/' . $task->id);
-}*/
-
+public function destroy(Task $task)
+{
+    $task->delete();
+    return redirect()->route('tasks.index');
+}
 }
