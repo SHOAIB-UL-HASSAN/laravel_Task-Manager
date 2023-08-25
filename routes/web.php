@@ -14,12 +14,13 @@ use App\Http\Controllers\TaskController;
 */
 
 Route::get('/', function () {
-    return ['WELOCME ' ];
+    return "welcome";
 });
-Route::get('/Tasks',['TaskController'::class ,'showTasks']);
-//Route::post('/Tasks',['TaskController'::class ,'store']);
+Route::get('/Tasks',['TaskController'::class ,'index']);
+//Route::get('/Tasks',['TaskController'::class,'singleUser']);
+Route::post('/Tasks',['TaskController'::class ,'store']);
 //Route::get('/Tasks/{task}',[ 'TaskController'::class,'show']);
-//Route::put('/Tasks/{task}', ['TaskController'::class,'update']);
+Route::put('/Tasks/{id}', ['TaskController'::class,'update']);
 
 
 
